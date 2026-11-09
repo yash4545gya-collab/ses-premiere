@@ -1,0 +1,46 @@
+/* Impression : noir sur blanc, pas de blocs orange, pas de navigation. */
+@media print {
+  @page { size: A4; margin: 12mm 13mm; }
+
+  :root {
+    --fond: #fff;
+    --carte: #fff;
+    --orange: #000;
+    --orange-pale: #fff;
+    --brun: #000;
+    --gris: #333;
+  }
+
+  html, body { background: #fff !important; color: #000 !important; font-size: 9pt; line-height: 1.3; }
+
+  .entete, .pied, .ariane, .sommaire, .sommaire-mobile, .sans-impression,
+  .precsuiv, .evitement, .nav-mobile, .quiz, .flash, .lu, button { display: none !important; }
+
+  .principal { padding: 0 !important; }
+  .conteneur { max-width: none; padding: 0; }
+
+  .bandeau { background: #fff !important; border-bottom: 2px solid #000; }
+  .terme { background: none !important; border-bottom: 1px solid #000; }
+  a { color: #000; text-decoration: none; }
+
+  .fiche { border: 0; padding: 0; margin: 0; max-width: none; }
+  .fiche-tete { padding-bottom: 3pt !important; margin-bottom: 5pt !important; }
+  .fiche-tete h1 { font-size: 14pt; }
+  .fiche-tete .ui { font-size: 7pt; }
+  .fiche h2 { font-size: 7pt; margin: 5pt 0 2pt; border-bottom: 0.5pt solid #000; padding-bottom: 1pt; }
+  .fiche ul, .fiche-meca, .fiche-defs dl { font-size: 8pt; line-height: 1.28; }
+  .fiche ul { padding-left: 9pt; }
+  .fiche li { margin-bottom: 1.5pt; }
+  .fiche-meca { margin-bottom: 2pt !important; }
+  .fiche .formule { margin: 1pt 0 !important; }
+  .fiche .formule figcaption { font-size: 6.5pt; }
+  .fiche-cols { column-count: 3; column-gap: 5mm; }
+  .fiche-cols section { break-inside: avoid-page; }
+  .fiche-defs { break-inside: auto !important; }
+  .fiche-defs dl > div { break-inside: avoid; margin-bottom: 2pt; }
+  .katex { font-size: 1em; }
+
+  .definition, .piege, .schema-cadre, .formule, .mecanisme li, .problematique, .encadre {
+    border-color: #000 !important; box-shadow: none !important; break-inside: avoid;
+  }
+}

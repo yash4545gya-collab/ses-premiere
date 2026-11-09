@@ -1,0 +1,248 @@
+/* =====================================================================
+   Style « doux » : coins arrondis, boutons en pilule, animations légères.
+   Chargé en dernier : il adoucit les styles de base sans les réécrire.
+   Toutes les animations sont coupées si l'appareil demande moins de mouvement
+   (règle prefers-reduced-motion dans global.css).
+   ===================================================================== */
+
+:root {
+  --rayon-s: 8px;
+  --rayon: 14px;
+  --rayon-l: 22px;
+  --ressort: cubic-bezier(0.34, 1.45, 0.64, 1);
+  --doux: cubic-bezier(0.22, 1, 0.36, 1);
+  --ombre-survol: 0 10px 28px rgba(74, 44, 29, 0.1);
+}
+
+/* ---------- Coins arrondis ---------- */
+.carte, .definition, .piege, .carte-lien, .formule, .encadre, .problematique, .schema-cadre,
+.calculateur, .exercice, .quiz, .flash-carte, .sujet-encadre, .document, .copie, .chrono,
+.phrases li, .etapes li, .grille label, .choix, .boite, .resume .jauge, .fiche, .exercice-correction,
+.quiz-retour, .resultat, .mecanisme li, .exercice-choix, .quiz-option {
+  border-radius: var(--rayon);
+}
+.tuile { border-radius: var(--rayon-l); overflow: hidden; }
+.recherche { border-radius: var(--rayon-l); overflow: hidden; }
+.nav-mobile { border-radius: 0 0 var(--rayon-l) var(--rayon-l); }
+.bandeau { border-radius: 0 0 var(--rayon-l) var(--rayon-l); margin: 0 6px; }
+@media (min-width: 768px) { .bandeau { border-radius: 0 0 32px 32px; margin: 0 12px; } }
+
+.btn { border-radius: 999px; padding-left: 1.5em; padding-right: 1.5em; }
+.etiquette, .terme-tag, .az-lettre, .ok-lu { border-radius: 999px; }
+.terme-tag { padding: 2px 10px; }
+.barre, .barre span { border-radius: 999px; }
+.barre { height: 6px; }
+.barre-fine { height: 4px; }
+
+.champ-saisie, .exercice-saisie, .filtres select, .champ-texte, .sommaire-mobile select,
+.brouillon textarea, .cell-input { border-radius: var(--rayon-s); }
+.champ-saisie, .exercice-saisie { overflow: hidden; }
+.tableau-defile { border-radius: var(--rayon-s); }
+.tableau table, .table-calc { border-radius: var(--rayon-s); overflow: hidden; }
+.encadre { border: 0; }
+.bouton-recherche, .nav-bouton { border-radius: 999px; }
+.lien-bouton { border-radius: var(--rayon-s); padding-left: 0.4rem; padding-right: 0.4rem; }
+.lien-bouton:hover { background: var(--orange-pale); text-decoration: none; }
+.sommaire-lien { border-radius: 0 var(--rayon-s) var(--rayon-s) 0; }
+.sommaire-lien.est-actif { background: var(--orange-pale); }
+
+/* ---------- Citation (accueil) ---------- */
+.citation {
+  display: inline-flex; align-items: center; gap: 0.15em;
+  margin: 0 0 1.2rem;
+  padding: 0.35rem 1rem 0.45rem;
+  background: var(--orange-pale);
+  border: 1px solid var(--brun);
+  border-radius: 999px;
+  font-family: var(--f-titre); font-style: italic; font-weight: 500;
+  font-size: clamp(1.05rem, 3.2vw, 1.3rem); line-height: 1.2;
+  transform: rotate(-2.5deg);
+  transform-origin: left center;
+  animation: citation-entree 700ms var(--ressort) both, citation-balance 5s ease-in-out 900ms infinite;
+}
+.citation-guillemet { font-size: 1.6em; line-height: 0.5; transform: translateY(0.12em); }
+@keyframes citation-entree {
+  from { opacity: 0; transform: rotate(-12deg) scale(0.6); }
+  to { opacity: 1; transform: rotate(-2.5deg) scale(1); }
+}
+@keyframes citation-balance {
+  0%, 100% { transform: rotate(-2.5deg); }
+  50% { transform: rotate(1deg) translateY(-2px); }
+}
+
+.nom { text-transform: none; letter-spacing: 0.03em; }
+
+/* ---------- Transition entre les pages ---------- */
+.page-entree { animation: page-entree 380ms var(--doux) both; }
+@keyframes page-entree {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* ---------- Tuiles de l'accueil ---------- */
+.tuiles > li { animation: tuile-entree 520ms var(--ressort) both; animation-delay: calc(var(--i, 0) * 45ms); }
+@keyframes tuile-entree {
+  from { opacity: 0; transform: translateY(18px) scale(0.92); }
+  to { opacity: 1; transform: none; }
+}
+.tuile { transition: transform 260ms var(--ressort), box-shadow 260ms ease; }
+.tuile:hover { transform: translateY(-6px) rotate(-1.2deg); box-shadow: 0 16px 30px rgba(243, 112, 33, 0.28); }
+.tuiles > li:nth-child(even) .tuile:hover { transform: translateY(-6px) rotate(1.2deg); }
+.tuile:active { transform: scale(0.97); }
+.tuile-num { transition: transform 320ms var(--ressort); display: inline-block; transform-origin: left bottom; }
+.tuile:hover .tuile-num { transform: scale(1.12) rotate(-4deg); }
+.tuile-ruban { transition: transform 400ms var(--doux); transform-origin: left; }
+.tuile:hover .tuile-ruban { transform: scaleX(1.02); }
+.tuile-extra:hover { box-shadow: 0 16px 30px rgba(74, 44, 29, 0.12); }
+
+/* ---------- Bandeau de chapitre ---------- */
+.bandeau-num { animation: numero-entree 600ms var(--ressort) both; }
+.bandeau-titre { animation: page-entree 500ms var(--doux) 80ms both; }
+@keyframes numero-entree {
+  from { opacity: 0; transform: translateX(-20px) rotate(-8deg); }
+  to { opacity: 1; transform: none; }
+}
+
+/* ---------- Boutons et cartes ---------- */
+.btn { transition: transform 180ms var(--ressort), box-shadow 200ms ease, background 200ms ease, border-color 200ms ease; }
+.btn:hover:not(:disabled) { transform: translateY(-2px); }
+.btn:active:not(:disabled) { transform: scale(0.95); }
+.carte-lien, .definition, .exercice, .piege { transition: transform 240ms var(--ressort), box-shadow 240ms ease, border-color 200ms ease; }
+.carte-lien:hover, .definition:hover { transform: translateY(-3px); box-shadow: var(--ombre-survol); }
+.az-lettre { transition: transform 160ms var(--ressort), background 160ms ease; }
+.az-lettre:hover:not(:disabled) { transform: translateY(-2px); }
+.choix, .exercice-choix, .quiz-option { transition: transform 180ms var(--ressort), border-color 180ms ease, background 180ms ease; }
+.choix:hover, .exercice-choix:hover, .quiz-option:hover:not(:disabled) { transform: translateX(3px); }
+
+/* ---------- Quiz : bonne réponse qui « saute », mauvaise qui secoue ---------- */
+.quiz-option.est-bonne { animation: saut 420ms var(--ressort); }
+.quiz-option.est-fausse { animation: secousse 380ms ease; }
+@keyframes saut {
+  0% { transform: scale(1); }
+  45% { transform: scale(1.035); }
+  100% { transform: scale(1); }
+}
+@keyframes secousse {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(5px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(2px); }
+}
+.quiz-score { animation: numero-entree 600ms var(--ressort) both; }
+
+/* ---------- Flashcards : retournement ---------- */
+.flash-carte { perspective: 900px; transition: transform 200ms var(--ressort), box-shadow 200ms ease; }
+.flash-carte:hover { transform: translateY(-3px); }
+.flash-recto, .flash-verso { animation: retournement 420ms var(--doux) both; backface-visibility: hidden; }
+@keyframes retournement {
+  from { opacity: 0; transform: rotateY(-80deg); }
+  to { opacity: 1; transform: rotateY(0); }
+}
+
+/* ---------- Schémas : les courbes se dessinent ---------- */
+.g-trace { stroke-dasharray: 1; stroke-dashoffset: 1; animation: trace 900ms var(--doux) forwards; }
+.g-trace:nth-of-type(2) { animation-delay: 150ms; }
+@keyframes trace { to { stroke-dashoffset: 0; } }
+.graphique polygon { animation: apparition 600ms ease 500ms both; }
+.graphique circle { animation: point 420ms var(--ressort) 700ms both; transform-box: fill-box; transform-origin: center; }
+@keyframes point { from { transform: scale(0); } to { transform: scale(1); } }
+
+/* ---------- Divers ---------- */
+.resultat-valeur { transition: color 200ms ease; }
+.etiquette-officiel { animation: point 400ms var(--ressort) both; }
+.chrono-temps { transition: transform 200ms var(--ressort); }
+.boite-n, .jauge-val { animation: apparition 500ms ease both; }
+
+/* ---------- Accueil : 16 tuiles sur 4 colonnes ---------- */
+@media (min-width: 1040px) { .tuiles { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; } }
+
+/* ---------- Atelier de courbes ---------- */
+.atelier-modeles { margin: 1.4rem 0 1rem; display: grid; gap: 0.5rem; }
+.atelier-modeles-liste { display: flex; flex-wrap: wrap; gap: 6px; }
+.atelier { display: grid; gap: 28px; grid-template-columns: minmax(0, 1fr); align-items: start; }
+@media (min-width: 1000px) { .atelier { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); } .atelier-graphe { position: sticky; top: calc(var(--entete-h) + 16px); } }
+.atelier-titre {
+  width: 100%; border: 0; border-bottom: 1px dashed #d8cfc2; background: transparent; padding: 0.2rem 0 0.4rem; margin-bottom: 0.8rem;
+  font-family: var(--f-titre); font-size: 1.6rem; font-weight: 600; color: var(--encre);
+}
+.atelier-titre:focus { outline: none; border-bottom-color: var(--orange); }
+.atelier .g-trace { animation: none; stroke-dasharray: none; stroke-dashoffset: 0; }
+.atelier .graphique polygon, .atelier .graphique circle { animation: none; }
+.atelier-export { display: flex; gap: 8px; margin-top: 0.7rem; justify-content: flex-end; }
+.atelier-resultats { display: grid; gap: 8px; margin-top: 1rem; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
+.atelier-resultats .resultat { margin-top: 0; }
+.atelier-resultats .resultat-valeur { font-size: 1.3rem; }
+.atelier-h2 { font-size: 1.5rem; margin: 1.6rem 0 0.6rem; }
+.atelier-reglages > .atelier-h2:first-child { margin-top: 0; }
+.atelier-courbes { list-style: none; padding: 0; margin: 0 0 1rem; display: grid; gap: 12px; }
+.atelier-courbe {
+  background: var(--carte); border: 1px solid #ece5da; border-left: 4px solid var(--encre); border-radius: var(--rayon);
+  padding: 0.8rem 1rem; display: grid; gap: 0.5rem; animation: tuile-entree 380ms var(--ressort) both;
+  transition: opacity 200ms ease, box-shadow 200ms ease;
+}
+.atelier-courbe:hover { box-shadow: var(--ombre-survol); }
+.atelier-offre { border-left-color: var(--orange); }
+.atelier-cout { border-left-color: var(--brun); }
+.atelier-autre { border-left-style: dashed; }
+.atelier-courbe.est-masquee { opacity: 0.55; }
+.atelier-courbe-tete { display: flex; gap: 8px; align-items: center; }
+.atelier-nom {
+  flex: 1; min-width: 0; border: 0; border-bottom: 1px dashed #d8cfc2; background: transparent;
+  font-family: var(--f-titre); font-size: 1.25rem; font-weight: 600; padding: 0.1rem 0; color: var(--encre);
+}
+.atelier-nom:focus { outline: none; border-bottom-color: var(--orange); }
+.atelier-courbe-tete select, .atelier-options-globales select {
+  min-height: 36px; padding: 0 0.6rem; border: 1px solid var(--encre); border-radius: 999px; background: var(--fond); font: inherit; font-size: 0.95rem; color: var(--encre);
+}
+.atelier-champ { display: grid; gap: 0.2rem; }
+.atelier-saisie { display: flex; align-items: center; gap: 10px; }
+.atelier-saisie input[type='range'] { flex: 1; min-width: 0; accent-color: var(--orange); height: 28px; }
+.atelier-nombre {
+  width: 5.5em; flex-shrink: 0; min-height: 36px; padding: 0 0.6rem; text-align: right;
+  border: 1px solid var(--encre); border-radius: var(--rayon-s); background: var(--fond); font: inherit; color: var(--encre);
+}
+.atelier-nombre:focus { outline: 2px solid var(--orange); outline-offset: -2px; }
+.atelier-equation { margin: 0; font-size: 0.98rem; color: #3d3935; }
+.atelier-options { display: flex; align-items: center; gap: 0.4rem 1.1rem; flex-wrap: wrap; }
+.atelier-options .case, .atelier-options-globales .case { min-height: 36px; }
+.icone-bouton {
+  margin-left: auto; display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px;
+  border-radius: 999px; border: 1px solid transparent; background: none; color: var(--gris); cursor: pointer;
+  transition: background 160ms ease, color 160ms ease, transform 160ms var(--ressort);
+}
+.icone-bouton:hover { background: var(--orange-pale); color: var(--encre); transform: rotate(-8deg); }
+.atelier-options-globales { display: grid; gap: 0.5rem; }
+.atelier-sauver { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.atelier-message { animation: point 300ms var(--ressort) both; background: var(--orange-pale); padding: 4px 10px; border-radius: 999px; }
+.atelier-liste { list-style: none; padding: 0; margin: 0.8rem 0 0; display: grid; gap: 4px; }
+.atelier-liste li { display: flex; align-items: center; gap: 6px; border-bottom: 1px solid #ece5da; }
+.atelier-liste .lien-bouton { flex: 1; }
+.btn svg { flex-shrink: 0; }
+
+/* ---------- En-tête : plus de place pour le menu ---------- */
+.bouton-recherche kbd { white-space: nowrap; }
+.marque-sous { white-space: nowrap; }
+@media (min-width: 1040px) { .nav-large { display: none; } .nav-bouton { display: inline-flex; } .bouton-recherche { margin-left: auto; } }
+@media (min-width: 1200px) {
+  .nav-large { display: flex; gap: 0.95rem; }
+  .nav-bouton, .nav-mobile { display: none; }
+  .bouton-recherche { margin-left: 0; }
+}
+@media (min-width: 1200px) and (max-width: 1399px) { .marque-prefixe { display: none; } }
+.nav-lien { border-radius: 999px; padding: 6px 2px; }
+
+/* Halo blanc derrière les noms de courbes (lisibles même quand une droite les traverse) */
+.g-courbe { paint-order: stroke; stroke: var(--carte); stroke-width: 5px; stroke-linejoin: round; }
+
+/* ---------- Citations tournantes (John Business) ---------- */
+.citation-bloc {
+  margin: 0 0 1.3rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem 0.8rem;
+  min-height: 2.6rem;
+}
+.citation-bloc .citation { margin: 0; }
+.citation-auteur {
+  font-family: var(--f-ui); font-size: 11.5px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--gris); transform: rotate(-2.5deg); transform-origin: left center;
+  animation: apparition 600ms ease 300ms both;
+}
