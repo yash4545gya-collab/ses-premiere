@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import { chapitreParId } from '../content/chapitres';
+import { CHAPITRES_BASE, chapitreParId } from '../content/chapitres';
 import { FilAriane } from '../components/Layout';
 import { Formule, Texte } from '../components/Texte';
 import { romain } from '../lib/romain';
@@ -11,6 +11,8 @@ export function FicheSynthese() {
   const c = chapitreParId(id);
   if (!c || !c.contenu) return <Introuvable />;
   const ch = c.contenu;
+  // La fiche tient sur une page : seulement les notions du programme, pas celles ajoutées en approfondissement.
+  const essentiels = new Set(CHAPITRES_BASE.find((b) => b.id === ch.id)?.definitions.map((d) => d.terme));
 
   return (
     <div className="conteneur">
@@ -69,7 +71,7 @@ export function FicheSynthese() {
           <section className="fiche-defs">
             <h2>Notions</h2>
             <dl>
-              {ch.definitions.map((d) => (
+              {ch.definitions.filter((d) => essentiels.has(d.terme)).map((d) => (
                 <div key={d.terme}>
                   <dt>{d.terme}</dt>
                   <dd>

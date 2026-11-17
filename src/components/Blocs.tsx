@@ -1,4 +1,6 @@
-import type { Bloc, Definition, SchemaRef } from '../content/types';
+import type { ReactNode } from 'react';
+import type { Bloc, Definition, ExempleCours, Partie, SchemaRef } from '../content/types';
+import { chercherTerme, termesEnValeur, type IndexTermes } from '../lib/termes';
 import { SCHEMAS } from '../schemas';
 import { Formule, Texte } from './Texte';
 
@@ -113,20 +115,127 @@ export function RenduBloc({ bloc, schemas }: { bloc: Bloc; schemas: SchemaRef[] 
   }
 }
 
-export function CarteDefinition({ d }: { d: Definition }) {
+/**
+ * Fiche d'une notion : définition « bac », explication développée, exemples,
+ * piège à éviter. `action` (ex. bouton favori) et `pied` (ex. lien vers le chapitre)
+ * sont facultatifs.
+ */
+export function CarteDefinition({ d, action, pied, compacte }: { d: Definition; action?: ReactNode; pied?: ReactNode; compacte?: boolean }) {
+  const exemples = [d.exemple, ...(d.exemples ?? [])];
   return (
-    <article className="definition" id={`def-${slug(d.terme)}`}>
-      <h3 className="definition-terme">{d.terme}</h3>
+    <article className={`definition ${compacte ? 'definition-compacte' : ''}`} id={`def-${slug(d.terme)}`}>
+      <div className="definition-ligne">
+        <h3 className="definition-terme">{d.terme}</h3>
+        {action}
+      </div>
       <p className="definition-texte">
         <Texte>{d.definition}</Texte>
       </p>
-      <p className="definition-exemple">
-        <span className="ui ui-gris">Exemple</span> <Texte>{d.exemple}</Texte>
-      </p>
+      {!compacte && d.developpement && (
+        <div className="definition-dev">
+          <p className="ui ui-gris">Pour bien comprendre</p>
+          <p>
+            <Texte>{d.developpement}</Texte>
+          </p>
+        </div>
+      )}
+      {exemples.length === 1 || compacte ? (
+        <p className="definition-exemple">
+          <span className="ui ui-gris">Exemple</span> <Texte>{d.exemple}</Texte>
+        </p>
+      ) : (
+        <div className="definition-exemples">
+          <p className="ui ui-gris">Exemples</p>
+          <ul>
+            {exemples.map((e, i) => (
+              <li key={i}>
+                <Texte>{e}</Texte>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+      {!compacte && d.nePasConfondre && (
+        <p className="definition-piege">
+          <span className="ui">Ne pas confondre</span> <Texte>{d.nePasConfondre}</Texte>
+        </p>
+      )}
       {d.voirAussi && d.voirAussi.length > 0 && (
         <p className="definition-voir ui ui-gris">Voir aussi : {d.voirAussi.join(' · ')}</p>
       )}
+      {pied}
     </article>
+  );
+}
+
+/** Exemples concrets à la fin d'une partie du cours */
+export function ExemplesPartie({ exemples }: { exemples: ExempleCours[] }) {
+  if (!exemples.length) return null;
+  return (
+    <div className="exemples-partie">
+      <p className="ui ui-gris">Exemples pour comprendre</p>
+      {exemples.map((e, i) => (
+        <article key={i} className="exemple-cours">
+          <p className="exemple-titre">{e.titre}</p>
+          <p>
+            <Texte>{e.texte}</Texte>
+          </p>
+        </article>
+      ))}
+    </div>
+  );
+}
+
+/** Tous les textes d'une partie (pour repérer les termes mis en valeur) */
+const textesDeLaPartie = (p: Partie): string[] =>
+  p.blocs.flatMap((b) => {
+    switch (b.type) {
+      case 'texte':
+        return [b.texte];
+      case 'encadre':
+        return [b.texte];
+      case 'liste':
+        return b.items;
+      case 'mecanisme':
+        return b.etapes;
+      case 'tableau':
+        return [...b.entetes, ...b.lignes.flat()];
+      default:
+        return [];
+    }
+  });
+
+/** Définitions des termes mis en valeur dans une partie, sans doublon, dans l'ordre d'apparition */
+export const notionsDeLaPartie = (p: Partie, index: IndexTermes): Definition[] => {
+  const vues = new Set<string>();
+  const out: Definition[] = [];
+  for (const t of textesDeLaPartie(p).flatMap(termesEnValeur)) {
+    const d = chercherTerme(index, t);
+    if (d && !vues.has(d.terme)) {
+      vues.add(d.terme);
+      out.push(d);
+    }
+  }
+  return out;
+};
+
+/** Les notions définies qui apparaissent dans une partie du cours */
+export function NotionsPartie({ definitions }: { definitions: Definition[] }) {
+  if (!definitions.length) return null;
+  return (
+    <details className="notions-partie" open>
+      <summary className="ui">Les notions de cette partie ({definitions.length})</summary>
+      <dl>
+        {definitions.map((d) => (
+          <div key={d.terme}>
+            <dt>{d.terme}</dt>
+            <dd>
+              <Texte>{d.definition}</Texte>
+            </dd>
+          </div>
+        ))}
+      </dl>
+    </details>
   );
 }
 

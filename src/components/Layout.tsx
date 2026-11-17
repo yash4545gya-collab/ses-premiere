@@ -1,7 +1,11 @@
 import { Menu, Search, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
+import { GLOSSAIRE } from '../lib/donnees';
+import { ContexteTermes, indexerDefinitions } from '../lib/termes';
 import { Recherche } from './Recherche';
+
+const INDEX_GLOSSAIRE = indexerDefinitions(GLOSSAIRE);
 
 const MAC = typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
 
@@ -92,7 +96,10 @@ export function Layout() {
 
       <main id="contenu" className="principal">
         <div key={pathname} className="page-entree">
-          <Outlet />
+          {/* les termes en valeur deviennent cliquables partout (définitions du glossaire) */}
+          <ContexteTermes.Provider value={INDEX_GLOSSAIRE}>
+            <Outlet />
+          </ContexteTermes.Provider>
         </div>
       </main>
 

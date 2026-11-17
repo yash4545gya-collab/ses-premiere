@@ -177,5 +177,39 @@ ok('méthodo EC2 rapport 84/58', Math.round((84 / 58) * 100) / 100, 1.45);
 ok('méthodo EC2 écart 25-34 → 35-49', 71 - 62, 9);
 ok('méthodo EC3 écart HLP / NSI (points)', 75 - 18, 57);
 
+// Développements du cours (exemples et définitions approfondies)
+ok('dev ch1 coût total 500 pizzas', 2000 + 500 * 3, 3500);
+ok('dev ch1 coût moyen 500 pizzas', (2000 + 500 * 3) / 500, 7);
+ok('dev ch1 coût moyen 1000 pizzas', (2000 + 1000 * 3) / 1000, 5);
+ok('dev ch1 perte du food-truck', 1200 - 1350, -150);
+ok('dev ch1 élasticité', -10 / 20, -0.5);
+ok('dev ch1 subvention : quantité', (10 - 2 + 2) / 1, 10); // 10 − 0,5Q = 2 − 2 + 0,5Q
+ok('dev ch1 subvention : prix payé', 10 - 0.5 * 10, 5);
+ok('dev ch1 subvention : coût public', 2 * 10, 20);
+ok('dev ch2 monopole : quantité (Rm = Cm)', 10 - 2, 8); // Rm = 10 − Q
+ok('dev ch2 monopole : profit', (10 - 0.5 * 8 - 2) * 8, 32);
+ok('dev ch2 logiciel 1 M copies', 50e6 / 1e6 + 2, 52);
+ok('dev ch2 logiciel 5 M copies', 50e6 / 5e6 + 2, 12);
+ok('dev ch4 revenu disponible', 1900 + 150 - 100, 1950);
+ok('dev ch4 taux d’épargne', (450 / 3000) * 100, 15);
+ok('dev ch4 besoin externe (autofinancement 60 %)', 250 - 0.6 * 250, 100);
+ok('dev ch4 intérêts 20 000 € à 4,5 %', 20000 * 0.045, 900);
+ok('dev ch4 coupon 5 000 € à 2 %', 5000 * 0.02, 100);
+ok('dev ch4 valeur ajoutée garage', 1000 - 400, 600);
+ok('dev ch5 1 000 € après 3 % d’inflation (≈ 970)', Math.floor(1000 / 1.03), 970);
+ok('dev ch5 hausse de la masse monétaire', 50 - 42, 8);
+ok('dev ch8 taux de plainte', (180000 / 600000) * 100, 30);
+ok('dev ch9 marge d’erreur n = 1000, p = 52 %', Math.round(1.96 * Math.sqrt((0.52 * 0.48) / 1000) * 1000) / 10, 3.1);
+ok('dev ch9 marge d’erreur n = 1000, p = 30 %', Math.round(1.96 * Math.sqrt((0.3 * 0.7) / 1000) * 1000) / 10, 2.8);
+ok('dev ch10 taux d’inscription', Math.round((1000 / 1100) * 1000) / 10, 90.9);
+ok('dev ch10 non-participation', Math.round(((1100 - 720) / 1100) * 1000) / 10, 34.5);
+ok('dev ch11 prime pure 1 % × 20 000', 0.01 * 20000, 200);
+ok('dev ch11 prime chargée 25 %', 200 * 1.25, 250);
+ok('dev ch11 caisse commune = sinistres', 1000 * 200, 10 * 20000);
+ok('dev ch11 sinistres attendus', 2000 * 0.05, 100);
+ok('dev ch11 prime pure 5 % × 2 000', (2000 * 0.05 * 2000) / 2000, 100);
+ok('dev ch11 prime avec 20 % de frais', 100 * 1.2, 120);
+ok('dev ch11 perte moyenne vélo', 1000 * 0.05, 50);
+
 console.log(erreurs ? `\n${erreurs} erreur(s)` : '\nTous les calculs sont vérifiés.');
 process.exit(erreurs ? 1 : 0);

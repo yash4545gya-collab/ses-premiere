@@ -1,5 +1,6 @@
 // Vérifie la cohérence du contenu (lancé par scripts/verifier-contenu.mjs).
-import { CHAPITRES } from '../src/content/chapitres';
+import { CHAPITRES, CHAPITRES_BASE } from '../src/content/chapitres';
+import { DEVELOPPEMENTS } from '../src/content/chapitres/developpements';
 import { SCHEMAS } from '../src/schemas';
 import { TECHNIQUES } from '../src/content/techniques';
 import { CALCULATEURS } from '../src/components/Calculateurs';
@@ -211,6 +212,40 @@ console.log(`OK  glossaire : ${GLOSSAIRE.length} notions · index de recherche :
   proche('offre négative : P*', neg.E?.p, 4);
   if (Math.abs((neg.surplus?.sp ?? 0) - integrale) > 1e-6) err(`atelier SP offre négative : ${neg.surplus?.sp} au lieu de ${integrale}`);
   console.log(`OK  atelier de courbes : ${MODELES.length} modèles, équilibre, surplus, taxe, prix imposé, offre négative vérifiés`);
+}
+
+// Développements : chaque chapitre est approfondi, chaque clé correspond à une vraie notion.
+{
+  let nbDev = 0;
+  let nbNouv = 0;
+  let nbEx = 0;
+  // Une notion ajoutée ne doit pas exister ailleurs (les doublons des chapitres d’origine sont voulus).
+  const vus = new Map<string, string>();
+  for (const base of CHAPITRES_BASE) for (const d of base.definitions) vus.set(d.terme, base.id);
+  for (const base of CHAPITRES_BASE) {
+    const dev = DEVELOPPEMENTS[base.id];
+    if (!dev) {
+      err(`développement manquant : ${base.id}`);
+      continue;
+    }
+    const existants = new Set(base.definitions.map((d) => d.terme));
+    for (const cle of Object.keys(dev.definitions)) if (!existants.has(cle)) err(`${base.id} : développement pour « ${cle} », notion absente`);
+    for (const d of dev.nouvellesDefinitions ?? []) {
+      const autre = vus.get(d.terme);
+      if (autre) err(`notion ajoutée « ${d.terme} » déjà définie dans ${autre}`);
+      vus.set(d.terme, base.id);
+      nbNouv++;
+    }
+    if ((dev.exemplesParPartie?.length ?? 0) > base.essentiel.parties.length) err(`${base.id} : plus d’exemples de parties que de parties`);
+    nbEx += (dev.exemplesParPartie ?? []).reduce((s, l) => s + l.length, 0);
+    const final = CHAPITRES.find((c) => c.meta.id === base.id)?.contenu;
+    for (const d of final?.definitions ?? []) {
+      if (!d.developpement) err(`${base.id} : « ${d.terme} » sans développement`);
+      if (1 + (d.exemples?.length ?? 0) < 2) err(`${base.id} : « ${d.terme} » a moins de 2 exemples`);
+      nbDev++;
+    }
+  }
+  console.log(`OK  développements : ${nbDev} notions approfondies (${nbNouv} ajoutées), ${nbEx} exemples de cours`);
 }
 
 const parType = Object.fromEntries((['EC1', 'EC2', 'EC3', 'Dissertation'] as const).map((t) => [t, SUJETS.filter((s) => s.type === t).length]));

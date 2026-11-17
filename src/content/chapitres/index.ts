@@ -14,8 +14,42 @@ import { marcheConcurrentiel } from './marche-concurrentiel';
 import { marchesImparfaits } from './marches-imparfaits';
 import { monnaie } from './monnaie';
 
-/** Chapitres rédigés. Ajouter ici chaque nouveau fichier de chapitre. */
-const REDIGES: Chapitre[] = [marcheConcurrentiel, marchesImparfaits, defaillancesMarche, financement, monnaie, socialisation, liensSociaux, deviance, opinionPublique, vote, risquesProtectionSociale, entreprises];
+import { DEVELOPPEMENTS } from './developpements';
+
+/** Fusionne un chapitre et son développement (définitions enrichies, notions ajoutées, exemples) */
+export function developper(c: Chapitre, dev = DEVELOPPEMENTS[c.id]): Chapitre {
+  if (!dev) return c;
+  return {
+    ...c,
+    definitions: [
+      ...c.definitions.map((d) => ({ ...d, ...dev.definitions[d.terme] })),
+      ...(dev.nouvellesDefinitions ?? []),
+    ],
+    essentiel: {
+      ...c.essentiel,
+      parties: c.essentiel.parties.map((p, i) => ({ ...p, exemples: [...(p.exemples ?? []), ...(dev.exemplesParPartie?.[i] ?? [])] })),
+    },
+  };
+}
+
+/** Chapitres de base, sans leur développement (utilisés par le vérificateur) */
+export const CHAPITRES_BASE: Chapitre[] = [
+  marcheConcurrentiel,
+  marchesImparfaits,
+  defaillancesMarche,
+  financement,
+  monnaie,
+  socialisation,
+  liensSociaux,
+  deviance,
+  opinionPublique,
+  vote,
+  risquesProtectionSociale,
+  entreprises,
+];
+
+/** Chapitres rédigés, avec leur développement. Ajouter ici chaque nouveau fichier de chapitre. */
+const REDIGES: Chapitre[] = CHAPITRES_BASE.map((c) => developper(c));
 
 const PAR_ID = new Map<string, ChapitreMeta>();
 for (const c of [...CHAPITRES_A_VENIR, ...REDIGES]) PAR_ID.set(c.id, c);

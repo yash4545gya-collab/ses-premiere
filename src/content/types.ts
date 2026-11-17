@@ -17,6 +17,34 @@ export interface Definition {
   exemple: string;
   /** Termes liés (affichés en « voir aussi »). */
   voirAussi?: string[];
+  /** « Pour bien comprendre » : explication développée de la notion (fichiers developpements/) */
+  developpement?: string;
+  /** Exemples supplémentaires (fichiers developpements/) */
+  exemples?: string[];
+  /** Notion voisine avec laquelle on la confond souvent, et la différence */
+  nePasConfondre?: string;
+  /** Autres façons d'écrire la notion dans le cours (pour les termes cliquables) */
+  synonymes?: string[];
+}
+
+/** Exemple concret affiché à la fin d'une partie de « L'essentiel » */
+export interface ExempleCours {
+  titre: string;
+  texte: string;
+}
+
+/**
+ * Développement d'un chapitre, rangé à part (src/content/chapitres/developpements/)
+ * pour que le cours de base reste lisible. Fusionné au chargement.
+ */
+export interface DeveloppementChapitre {
+  id: string;
+  /** Clé = terme exact d'une définition du chapitre */
+  definitions: Record<string, { developpement: string; exemples: string[]; nePasConfondre?: string; synonymes?: string[] }>;
+  /** Notions ajoutées au chapitre (définition complète) */
+  nouvellesDefinitions?: Definition[];
+  /** Exemples ajoutés à la fin de chaque partie (indice 0 = partie I) */
+  exemplesParPartie?: ExempleCours[][];
 }
 
 export interface Auteur {
@@ -51,6 +79,8 @@ export type Bloc =
 export interface Partie {
   titre: string;
   blocs: Bloc[];
+  /** Exemples pour comprendre (ajoutés depuis developpements/) */
+  exemples?: ExempleCours[];
 }
 
 export interface Piege {

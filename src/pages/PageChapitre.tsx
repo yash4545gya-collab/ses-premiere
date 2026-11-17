@@ -1,6 +1,8 @@
 import { Link, useParams } from 'react-router-dom';
 import { CHAPITRES, chapitreParId, type ChapitreOrdonne } from '../content/chapitres';
-import { CarteDefinition, RenduBloc } from '../components/Blocs';
+import { CarteDefinition, ExemplesPartie, NotionsPartie, RenduBloc, notionsDeLaPartie } from '../components/Blocs';
+import { GLOSSAIRE } from '../lib/donnees';
+import { ContexteTermes, indexerDefinitions } from '../lib/termes';
 import { Flashcards } from '../components/Flashcards';
 import { FilAriane } from '../components/Layout';
 import { Quiz } from '../components/Quiz';
@@ -104,6 +106,8 @@ export function PageChapitre() {
   }
 
   const ch = c.contenu;
+  // le chapitre en cours a la priorité, puis tout le glossaire
+  const index = indexerDefinitions(ch.definitions, GLOSSAIRE);
   const sections = [
     { id: 'essentiel', lib: 'L’essentiel' },
     { id: 'definitions', lib: 'Définitions' },
@@ -117,7 +121,7 @@ export function PageChapitre() {
   ];
 
   return (
-    <>
+    <ContexteTermes.Provider value={index}>
       <Bandeau c={c} />
       <div className="conteneur">
         {ariane}
@@ -149,6 +153,8 @@ export function PageChapitre() {
                   {p.blocs.map((b, j) => (
                     <RenduBloc key={j} bloc={b} schemas={ch.schemas} />
                   ))}
+                  <ExemplesPartie exemples={p.exemples ?? []} />
+                  <NotionsPartie definitions={notionsDeLaPartie(p, index)} />
                 </div>
               ))}
               <div className="lu">
@@ -258,7 +264,7 @@ export function PageChapitre() {
           </article>
         </div>
       </div>
-    </>
+    </ContexteTermes.Provider>
   );
 }
 

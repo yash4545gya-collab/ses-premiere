@@ -45,6 +45,7 @@ Le contenu est séparé de l’affichage : tu peux tout modifier sans toucher au
 |---|---|
 | Un chapitre (cours, définitions, auteurs, pièges, synthèse, quiz) | `src/content/chapitres/<id>.ts` |
 | Liste des chapitres rédigés | `src/content/chapitres/index.ts` |
+| Approfondissements (explications détaillées des notions, exemples, « ne pas confondre », notions ajoutées, exemples de fin de partie) | `src/content/chapitres/developpements/<id>.ts` |
 | Les techniques et leurs exercices | `src/content/techniques/*.ts` |
 | La méthodologie | `src/content/methodo/*.ts` |
 | Les sujets officiels / sujets type | `src/content/sujets/officiels.ts`, `src/content/sujets/types.ts` |

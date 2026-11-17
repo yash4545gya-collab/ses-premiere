@@ -13,7 +13,7 @@ await build({
   jsx: 'automatic',
   outfile: out,
   logLevel: 'error',
-  external: ['react', 'react/jsx-runtime', 'katex'],
+  external: ['react', 'react/jsx-runtime', 'react-dom', 'katex'],
 });
 try {
   execFileSync(process.execPath, [out], { stdio: 'inherit' });

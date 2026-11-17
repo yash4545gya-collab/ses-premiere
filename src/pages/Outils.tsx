@@ -2,6 +2,7 @@ import Fuse from 'fuse.js';
 import { Star } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
+import { CarteDefinition } from '../components/Blocs';
 import { FilAriane } from '../components/Layout';
 import { Quiz, melanger } from '../components/Quiz';
 import { Texte } from '../components/Texte';
@@ -102,25 +103,22 @@ export function Glossaire() {
           {liste.map((g) => {
             const fav = favoris.includes(g.cle);
             return (
-              <article key={g.cle} className="definition">
-                <div className="definition-ligne">
-                  <h3 className="definition-terme">{g.terme}</h3>
+              <CarteDefinition
+                key={g.cle}
+                d={g}
+                action={
                   <button className={`favori ${fav ? 'est-favori' : ''}`} onClick={() => basculer(g.cle)} aria-pressed={fav} aria-label={fav ? `Retirer ${g.terme} des favoris` : `Ajouter ${g.terme} aux favoris`}>
                     <Star size={20} strokeWidth={1.25} />
                   </button>
-                </div>
-                <p className="definition-texte">
-                  <Texte>{g.definition}</Texte>
-                </p>
-                <p className="definition-exemple">
-                  <span className="ui ui-gris">Exemple</span> <Texte>{g.exemple}</Texte>
-                </p>
-                <p className="definition-voir ui ui-gris">
-                  <Link to={`/chapitre/${g.chapitreId}`}>
-                    Chapitre {romain(g.numero)} · {g.chapitreTitre}
-                  </Link>
-                </p>
-              </article>
+                }
+                pied={
+                  <p className="definition-voir ui ui-gris">
+                    <Link to={`/chapitre/${g.chapitreId}`}>
+                      Chapitre {romain(g.numero)} · {g.chapitreTitre}
+                    </Link>
+                  </p>
+                }
+              />
             );
           })}
         </div>

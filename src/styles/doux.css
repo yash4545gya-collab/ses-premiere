@@ -246,3 +246,68 @@
   color: var(--gris); transform: rotate(-2.5deg); transform-origin: left center;
   animation: apparition 600ms ease 300ms both;
 }
+
+/* =====================================================================
+   Cours développé : termes cliquables, notions de la partie, exemples,
+   fiches de définition enrichies
+   ===================================================================== */
+
+/* Terme clé cliquable */
+.terme-defini {
+  font: inherit; color: inherit; padding: 0 1px; margin: 0; cursor: pointer;
+  border: 0; border-bottom: 1.5px solid var(--orange); border-radius: 3px 3px 0 0;
+  background: linear-gradient(transparent 62%, var(--orange-pale) 62%);
+  transition: background 160ms ease;
+}
+.terme-defini:hover, .terme-defini.est-ouvert { background: var(--orange-pale); }
+.terme-defini:focus-visible { outline: 2px solid var(--encre); outline-offset: 2px; }
+
+/* Bulle de définition */
+.bulle-terme {
+  position: fixed; z-index: 90; width: min(340px, calc(100vw - 24px));
+  background: var(--carte); border: 1px solid var(--brun); border-top: 3px solid var(--orange);
+  border-radius: var(--rayon); box-shadow: 0 14px 34px rgba(74, 44, 29, 0.18);
+  padding: 0.85rem 1rem 0.8rem; font-size: 0.97rem; line-height: 1.5;
+  animation: bulle-entree 200ms var(--ressort) both; overflow-y: auto; overscroll-behavior: contain;
+}
+.bulle-haut { transform: translateY(-100%); animation-name: bulle-entree-haut; }
+@keyframes bulle-entree { from { opacity: 0; transform: translateY(-6px) scale(0.97); } to { opacity: 1; transform: none; } }
+@keyframes bulle-entree-haut { from { opacity: 0; transform: translateY(calc(-100% + 6px)) scale(0.97); } to { opacity: 1; transform: translateY(-100%); } }
+.bulle-titre { font-family: var(--f-titre); font-size: 1.2rem; font-weight: 600; margin: 0 0 0.3rem; line-height: 1.2; }
+.bulle-def { margin: 0 0 0.5rem; }
+.bulle-exemple { margin: 0 0 0.6rem; font-size: 0.92rem; color: #3d3935; }
+.bulle-lien { text-decoration: none; border-bottom: 1px solid var(--orange); }
+
+/* Notions de la partie */
+.notions-partie {
+  margin: 1.4rem 0 0.4rem; background: var(--carte); border: 1px solid #ece5da; border-left: 3px solid var(--orange);
+  border-radius: var(--rayon); padding: 0.7rem 1.1rem;
+}
+.notions-partie summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; }
+.notions-partie summary::-webkit-details-marker { display: none; }
+.notions-partie summary::after { content: '–'; font-size: 16px; }
+.notions-partie:not([open]) summary::after { content: '+'; }
+.notions-partie dl { margin: 0.6rem 0 0; display: grid; gap: 0.55rem; }
+.notions-partie dt { font-family: var(--f-titre); font-weight: 600; font-size: 1.08rem; line-height: 1.25; }
+.notions-partie dd { margin: 0.1rem 0 0; font-size: 0.97rem; line-height: 1.5; color: #2b2825; }
+
+/* Exemples de fin de partie */
+.exemples-partie { margin: 1.4rem 0 0; display: grid; gap: 10px; }
+.exemple-cours {
+  background: var(--orange-pale); border-radius: var(--rayon); padding: 0.85rem 1.1rem;
+  transition: transform 220ms var(--ressort);
+}
+.exemple-cours:hover { transform: translateX(3px); }
+.exemple-cours p { margin: 0; }
+.exemple-titre { font-family: var(--f-titre); font-size: 1.15rem; font-weight: 600; margin-bottom: 0.25rem !important; }
+
+/* Fiche de définition enrichie */
+.definition-dev { margin: 0.7rem 0; padding: 0.6rem 0.85rem; background: var(--fond); border-radius: var(--rayon-s); }
+.definition-dev p { margin: 0; }
+.definition-dev p + p { margin-top: 0.2rem; }
+.definition-exemples { margin: 0.4rem 0 0; }
+.definition-exemples ul { margin: 0.2rem 0 0; padding-left: 1.15rem; font-size: 0.97rem; }
+.definition-exemples li { margin-bottom: 0.25rem; }
+.definition-exemples li::marker { color: var(--orange); }
+.definition-piege { margin: 0.7rem 0 0; font-size: 0.96rem; padding: 0.5rem 0.8rem; border: 1px dashed var(--brun); border-radius: var(--rayon-s); }
+.definition-piege .ui { margin-right: 0.3rem; }
